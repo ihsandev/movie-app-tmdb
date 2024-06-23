@@ -6,9 +6,11 @@ import styled from "styled-components";
 import Wrapper from "../components/atoms/Wrapper";
 import Button from "../components/atoms/Button";
 import { checkIsFavorited } from "../utils/helpers";
+import { useCookies } from "react-cookie";
 
 const DetailMovie = () => {
   const params = useParams();
+  const [cookies] = useCookies(["token"]);
   const { state } = useContext(MoviesContext);
 
   useEffect(() => {
@@ -32,37 +34,38 @@ const DetailMovie = () => {
           </HeroStyled>
           <ContentWrapper>
             <Wrapper>
-              <ContentHeader>
-                <div className="btn-action">
-                  <Button
-                    variant={isFavorited ? "danger" : "success"}
-                    onClick={() => {
-                      state.addToFavorite({
-                        media_type: "movie",
-                        media_id: state.detail?.id,
-                        favorite: isFavorited ? false : true,
-                        movie: state.detail,
-                      });
-                    }}
-                  >
-                    {isFavorited ? "Remove Favorite" : "Add To Favorite"}
-                  </Button>{" "}
-                  <Button
-                    variant={isWatcthlist ? "danger" : "success"}
-                    onClick={() => {
-                      state.addToWatchlist({
-                        media_type: "movie",
-                        media_id: state.detail?.id,
-                        watchlist: isWatcthlist ? false : true,
-                        movie: state.detail,
-                      });
-                    }}
-                  >
-                    {isWatcthlist ? "Remove Watchlist" : "Add To Watchlist"}
-                  </Button>
-                </div>
-              </ContentHeader>
-
+              {cookies.token && (
+                <ContentHeader>
+                  <div className="btn-action">
+                    <Button
+                      variant={isFavorited ? "danger" : "success"}
+                      onClick={() => {
+                        state.addToFavorite({
+                          media_type: "movie",
+                          media_id: state.detail?.id,
+                          favorite: isFavorited ? false : true,
+                          movie: state.detail,
+                        });
+                      }}
+                    >
+                      {isFavorited ? "Remove Favorite" : "Add To Favorite"}
+                    </Button>{" "}
+                    <Button
+                      variant={isWatcthlist ? "danger" : "success"}
+                      onClick={() => {
+                        state.addToWatchlist({
+                          media_type: "movie",
+                          media_id: state.detail?.id,
+                          watchlist: isWatcthlist ? false : true,
+                          movie: state.detail,
+                        });
+                      }}
+                    >
+                      {isWatcthlist ? "Remove Watchlist" : "Add To Watchlist"}
+                    </Button>
+                  </div>
+                </ContentHeader>
+              )}
               <ContentStyled>
                 <img
                   src={`${IMAGE_PATH_URI}${state.detail?.backdrop_path}`}
