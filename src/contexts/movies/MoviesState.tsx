@@ -13,6 +13,7 @@ import {
   GET_DETAIL,
   GET_FAVORITES,
   GET_NOW_PLAYING,
+  GET_SEARCH_MOVIE,
   GET_TOP_RATED,
   GET_WATCHLIST,
   IMoviesAction,
@@ -30,6 +31,7 @@ const MovieState = ({ children }: { children: ReactNode }) => {
     top_rated: [],
     favorites: [],
     watchlists: [],
+    searchMovies: [],
     favoritesCount: 0,
     detail: {
       id: "",
@@ -67,6 +69,19 @@ const MovieState = ({ children }: { children: ReactNode }) => {
     try {
       const res = await API_CALL({ url: `/3/movie/${id}` });
       dispatch({ type: GET_DETAIL, payload: res.data });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const searchMovie = async (params: any) => {
+    try {
+      const res = await API_CALL(`/3/search/movie`, {
+        params,
+      });
+      if (res.status === 200) {
+        dispatch({ type: GET_SEARCH_MOVIE, payload: res.data?.results });
+      }
     } catch (error) {
       console.log(error);
     }
@@ -204,6 +219,7 @@ const MovieState = ({ children }: { children: ReactNode }) => {
         getFavorites,
         getWatchlist,
         addToWatchlist,
+        searchMovie,
       },
       dispatch,
     }),

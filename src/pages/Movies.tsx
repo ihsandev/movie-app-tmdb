@@ -9,97 +9,148 @@ import Button from "../components/atoms/Button";
 const Movies = () => {
   const { state } = useContext(MoviesContext);
   const [page, setPage] = useState(1);
-  const { getMovies, loading, now_playing, top_rated, addToFavorite } = state;
+  const {
+    getMovies,
+    loading,
+    now_playing,
+    top_rated,
+    addToFavorite,
+    searchMovies,
+  } = state;
 
   useEffect(() => {
     getMovies("now_playing", page);
     getMovies("top_rated", page);
   }, [page]);
 
+  console.log(state.searchMovies);
+
   return (
     <>
-      <MoviesHeaderStyled>
-        <h1>Now Playing</h1>
-        <div>
-          {page > 1 && (
-            <Button variant="warning" onClick={() => setPage(page - 1)}>
-              Prev
-            </Button>
-          )}
-          <Button variant="warning" onClick={() => setPage(page + 1)}>
-            Next
-          </Button>
-        </div>
-      </MoviesHeaderStyled>
-      <MoviesStyled>
-        {loading ? (
-          <span>loading...</span>
-        ) : (
-          now_playing?.map((movie) => (
-            <MovieCard
-              key={movie?.id}
-              movie_id={movie?.id}
-              title={movie?.title}
-              image={`${IMAGE_PATH_URI}${movie?.poster_path}`}
-              onFavorite={() => {
-                addToFavorite({
-                  media_type: "movie",
-                  media_id: movie?.id,
-                  favorite: checkIsFavorited("favorites", movie?.id)
-                    ? false
-                    : true,
-                  movie,
-                });
-              }}
-              onWatchlist={() => {
-                state.addToWatchlist({
-                  media_type: "movie",
-                  media_id: movie?.id,
-                  watchlist: checkIsFavorited("watchlists", movie?.id)
-                    ? false
-                    : true,
-                  movie,
-                });
-              }}
-            />
-          ))
-        )}
-      </MoviesStyled>
-      <h1>Top Rated Movies</h1>
-      <MoviesStyled>
-        {loading ? (
-          <span>loading...</span>
-        ) : (
-          top_rated?.map((movie) => (
-            <MovieCard
-              key={movie?.id}
-              movie_id={movie?.id}
-              title={movie?.title}
-              image={`${IMAGE_PATH_URI}${movie?.poster_path}`}
-              onFavorite={() => {
-                addToFavorite({
-                  media_type: "movie",
-                  media_id: movie?.id,
-                  favorite: checkIsFavorited("favorites", movie?.id)
-                    ? false
-                    : true,
-                  movie,
-                });
-              }}
-              onWatchlist={() => {
-                state.addToWatchlist({
-                  media_type: "movie",
-                  media_id: movie?.id,
-                  watchlist: checkIsFavorited("watchlists", movie?.id)
-                    ? false
-                    : true,
-                  movie,
-                });
-              }}
-            />
-          ))
-        )}
-      </MoviesStyled>
+      {searchMovies && searchMovies?.length > 1 ? (
+        <>
+          <h1>Search Result</h1>
+          <MoviesStyled>
+            {loading ? (
+              <span>loading...</span>
+            ) : (
+              searchMovies?.map((movie) => (
+                <MovieCard
+                  key={movie?.id}
+                  movie_id={movie?.id}
+                  title={movie?.title}
+                  image={`${IMAGE_PATH_URI}${movie?.poster_path}`}
+                  onFavorite={() => {
+                    addToFavorite({
+                      media_type: "movie",
+                      media_id: movie?.id,
+                      favorite: checkIsFavorited("favorites", movie?.id)
+                        ? false
+                        : true,
+                      movie,
+                    });
+                  }}
+                  onWatchlist={() => {
+                    state.addToWatchlist({
+                      media_type: "movie",
+                      media_id: movie?.id,
+                      watchlist: checkIsFavorited("watchlists", movie?.id)
+                        ? false
+                        : true,
+                      movie,
+                    });
+                  }}
+                />
+              ))
+            )}
+          </MoviesStyled>
+        </>
+      ) : (
+        <>
+          <MoviesHeaderStyled>
+            <h1>Now Playing</h1>
+            <div>
+              {page > 1 && (
+                <Button variant="warning" onClick={() => setPage(page - 1)}>
+                  Prev
+                </Button>
+              )}
+              <Button variant="warning" onClick={() => setPage(page + 1)}>
+                Next
+              </Button>
+            </div>
+          </MoviesHeaderStyled>
+          <MoviesStyled>
+            {loading ? (
+              <span>loading...</span>
+            ) : (
+              now_playing?.map((movie) => (
+                <MovieCard
+                  key={movie?.id}
+                  movie_id={movie?.id}
+                  title={movie?.title}
+                  image={`${IMAGE_PATH_URI}${movie?.poster_path}`}
+                  onFavorite={() => {
+                    addToFavorite({
+                      media_type: "movie",
+                      media_id: movie?.id,
+                      favorite: checkIsFavorited("favorites", movie?.id)
+                        ? false
+                        : true,
+                      movie,
+                    });
+                  }}
+                  onWatchlist={() => {
+                    state.addToWatchlist({
+                      media_type: "movie",
+                      media_id: movie?.id,
+                      watchlist: checkIsFavorited("watchlists", movie?.id)
+                        ? false
+                        : true,
+                      movie,
+                    });
+                  }}
+                />
+              ))
+            )}
+          </MoviesStyled>
+          <h1>Top Rated Movies</h1>
+          <MoviesStyled>
+            {loading ? (
+              <span>loading...</span>
+            ) : (
+              top_rated?.map((movie) => (
+                <MovieCard
+                  key={movie?.id}
+                  movie_id={movie?.id}
+                  title={movie?.title}
+                  image={`${IMAGE_PATH_URI}${movie?.poster_path}`}
+                  onFavorite={() => {
+                    addToFavorite({
+                      media_type: "movie",
+                      media_id: movie?.id,
+                      favorite: checkIsFavorited("favorites", movie?.id)
+                        ? false
+                        : true,
+                      movie,
+                    });
+                  }}
+                  onWatchlist={() => {
+                    state.addToWatchlist({
+                      media_type: "movie",
+                      media_id: movie?.id,
+                      watchlist: checkIsFavorited("watchlists", movie?.id)
+                        ? false
+                        : true,
+                      movie,
+                    });
+                  }}
+                />
+              ))
+            )}
+          </MoviesStyled>
+        </>
+      )}
     </>
   );
 };

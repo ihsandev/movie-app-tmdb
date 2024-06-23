@@ -12,6 +12,7 @@ export const GET_WATCHLIST: string = "GET_WATCHLIST";
 export const SET_TOTAL_WATCHLIST: string = "SET_TOTAL_WATCHLIST";
 export const SET_WATCHLIST: string = "SET_WATCHLIST";
 export const SET_MENU: string = "SET_MENU";
+export const GET_SEARCH_MOVIE = "GET_SEARCH_MOVIE";
 
 export interface IMovies {
   id: string;
@@ -34,6 +35,7 @@ export interface IMoviesState {
   favorites: (IMovies | undefined)[];
   favoritesCount: number;
   watchlists: (IMovies | undefined)[];
+  searchMovies: IMovies[];
   detail: IDetail;
   loading: boolean;
   getMovies?: any;
@@ -43,6 +45,7 @@ export interface IMoviesState {
   getWatchlist?: any;
   addToWatchlist?: any;
   showMenu: boolean;
+  searchMovie?: any;
 }
 
 export interface IMoviesAction {

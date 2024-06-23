@@ -6,21 +6,36 @@ import { device } from "../../utils/constans";
 import Button from "../atoms/Button";
 import Login from "./Login";
 import SidebarMobile from "./SidebarMobile";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import MoviesContext from "../../contexts/movies/MoviesContext";
 import { SET_MENU } from "../../contexts/movies/MoviesTypes";
 
 const Header = () => {
   const [cookies] = useCookies(["token"]);
   const { state, dispatch } = useContext(MoviesContext);
-
+  const [keyword, setKeyword] = useState("");
   const { pathname } = useLocation();
+
+  useEffect(() => {
+    state.searchMovie({ query: keyword });
+  }, [keyword]);
+
   return (
     <HeaderWrapperStyled>
       <HeaderStyled>
-        <Link to="/">
-          <img src={logo} alt="logo" width={150} />
-        </Link>
+        <div>
+          <Link to="/">
+            <img className="logo" src={logo} alt="logo" width={150} />
+          </Link>
+          {pathname === "/" && (
+            <div>
+              <input
+                placeholder="Search Movie..."
+                onChange={(e) => setKeyword(e.target.value)}
+              />
+            </div>
+          )}
+        </div>
         <nav>
           <NavStyled>
             {cookies.token ? (
@@ -78,6 +93,26 @@ const HeaderStyled = styled.div`
   justify-content: space-between;
   max-width: 1024px;
   margin: 0 auto;
+  > div:nth-child(1) {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    input {
+      width: 100%;
+      background: none;
+      border: 1px solid white;
+      outline: none;
+      padding: 0.3rem 1rem;
+      color: white;
+      border-radius: 50px;
+      font-size: 0.9rem;
+    }
+  }
+  @media ${device.sm} {
+    .logo {
+      width: 60px;
+    }
+  }
 `;
 
 const NavStyled = styled.ul`

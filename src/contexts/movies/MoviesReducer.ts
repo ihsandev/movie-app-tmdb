@@ -2,6 +2,7 @@ import {
   GET_DETAIL,
   GET_FAVORITES,
   GET_NOW_PLAYING,
+  GET_SEARCH_MOVIE,
   GET_TOP_RATED,
   GET_WATCHLIST,
   IMoviesAction,
@@ -20,6 +21,12 @@ export default (
       return {
         ...state,
         showMenu: payload,
+      };
+    case GET_SEARCH_MOVIE:
+      return {
+        ...state,
+        loading: false,
+        searchMovies: payload,
       };
     case GET_NOW_PLAYING:
       return {
