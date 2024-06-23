@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import MoviesContext from "../contexts/movies/MoviesContext";
-import { IMAGE_PATH_URI } from "../utils/constans";
+import { device, IMAGE_PATH_URI } from "../utils/constans";
 import styled from "styled-components";
 import Wrapper from "../components/atoms/Wrapper";
 import Button from "../components/atoms/Button";
@@ -16,6 +16,7 @@ const DetailMovie = () => {
   }, [params]);
 
   const isFavorited = checkIsFavorited("favorites", state.detail?.id);
+  const isWatcthlist = checkIsFavorited("watchlists", state.detail?.id);
 
   return (
     <>
@@ -46,7 +47,19 @@ const DetailMovie = () => {
                   >
                     {isFavorited ? "Remove Favorite" : "Add To Favorite"}
                   </Button>{" "}
-                  <Button>Add To Watchlist</Button>
+                  <Button
+                    variant={isWatcthlist ? "danger" : "success"}
+                    onClick={() => {
+                      state.addToWatchlist({
+                        media_type: "movie",
+                        media_id: state.detail?.id,
+                        watchlist: isWatcthlist ? false : true,
+                        movie: state.detail,
+                      });
+                    }}
+                  >
+                    {isWatcthlist ? "Remove Watchlist" : "Add To Watchlist"}
+                  </Button>
                 </div>
               </ContentHeader>
 
@@ -88,6 +101,7 @@ const HeroStyled = styled.div<IHero>`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  text-align: center;
   align-items: center;
   position: relative;
   > a button {
@@ -101,6 +115,10 @@ const ContentStyled = styled.div`
   display: flex;
   gap: 1rem;
   margin-top: 1rem;
+  @media ${device.sm} {
+    flex-direction: column;
+    padding: 1rem;
+  }
 `;
 
 const ContentWrapper = styled.div`
@@ -118,6 +136,9 @@ const ContentHeader = styled.div`
   .btn-action {
     display: flex;
     gap: 0.5rem;
+  }
+  @media ${device.sm} {
+    padding-inline: 1rem;
   }
 `;
 
