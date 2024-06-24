@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Login from "./Login";
+import { useCookies } from "react-cookie";
 
 interface ISidebar {
   open: boolean | undefined;
@@ -8,17 +9,22 @@ interface ISidebar {
 }
 
 const SidebarMobile = ({ open, close }: ISidebar) => {
+  const [cookies] = useCookies(["token"]);
   const { pathname } = useLocation();
   return (
     <>
       <Overlay open={open} onClick={close}>
         <AsideStyle open={open}>
-          <ListMenuStyled active={pathname === "/favorites"}>
-            <Link to="/favorites">Favorite</Link>
-          </ListMenuStyled>
-          <ListMenuStyled active={pathname === "/watchlists"}>
-            <Link to="/watchlists">WatchList</Link>
-          </ListMenuStyled>
+          {cookies.token && (
+            <>
+              <ListMenuStyled active={pathname === "/favorites"}>
+                <Link to="/favorites">Favorite</Link>
+              </ListMenuStyled>
+              <ListMenuStyled active={pathname === "/watchlists"}>
+                <Link to="/watchlists">WatchList</Link>
+              </ListMenuStyled>
+            </>
+          )}
           <Login />
         </AsideStyle>
       </Overlay>
